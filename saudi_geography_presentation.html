@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مظاهر التضاريس - المملكة العربية السعودية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0c1821 0%, #1a365d 25%, #2d5a87 50%, #3182ce 75%, #4299e1 100%);
+            color: white;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 15px;
+            padding-top: 50px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            z-index: 10;
+        }
+
+        .slide-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1300px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff6347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titlePulse {
+            from { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); }
+            to { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)); }
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00bcd4, #2196f3, #3f51b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h3 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #4fc3f7;
+        }
+
+        .saudi-flag {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: flagWave 2s ease-in-out infinite;
+        }
+
+        @keyframes flagWave {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(3deg) scale(1.05); }
+            75% { transform: rotate(-3deg) scale(1.05); }
+        }
+
+        .main-title {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            border-radius: 40px;
+            border: 3px solid rgba(255, 215, 0, 0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .student-info {
+            position: absolute;
+            bottom: 50px;
+            right: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px 35px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            font-size: 1.3rem;
+            color: #ffd700;
+            backdrop-filter: blur(15px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            padding: 20px;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 215, 0, 0.7);
+        }
+
+        .real-image {
+            width: 100%;
+            max-width: 450px;
+            height: 280px;
+            border-radius: 25px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .image-caption {
+            font-size: 1.1rem;
+            color: #ffd700;
+            text-align: center;
+            margin-top: 12px;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+            border: 2px solid rgba(76, 175, 80, 0.4);
+            border-radius: 25px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            backdrop-filter: blur(15px);
+        }
+
+        .definition-box::before {
+            content: '📖';
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 1.5rem;
+        }
+
+        .definition-box p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin: 10px 0;
+            text-align: justify;
+        }
+
+        .detail-box {
+            font-size: 1rem;
+            background: rgba(255, 152, 0, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border-right: 4px solid #ff9800;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            color: #ffd700;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #ffd700);
+            transition: width 0.6s ease;
+            z-index: 1001;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .navigation-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffd700;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 15px; padding-top: 80px; }
+            .slide-content { padding: 15px; }
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.3rem; }
+            h3 { font-size: 2rem; }
+            .content-grid { grid-template-columns: 1fr; gap: 15px; }
+            .student-info { position: relative; bottom: auto; right: auto; margin-top: 30px; font-size: 1.3rem; }
+            .real-image { height: 200px; font-size: 3rem; }
+            .saudi-flag { font-size: 3rem; }
+            .detail-box { font-size: 1.1rem; }
+            .definition-box p { font-size: 1.3rem; }
+            .image-caption { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter" id="slideCounter">1 / 10</div>
+    <div class="navigation-hint">📱 اضغط أو استخدم الأسهم للتنقل</div>
+    
+    <div class="presentation-container">
+        <!-- 1. العنوان -->
+        <div class="slide active">
+            <div class="slide-content main-title">
+                <h1>🏔️ الدرس الثاني: مظاهر التضاريس 🏛️</h1>
+                <div class="saudi-flag">🇸🇦</div>
+                <h3>الوحدة الأولى - الدرس الثاني</h3>
+                <h3>المملكة العربية السعودية</h3>
+            </div>
+            <div class="student-info">
+                <div><strong>الطالب:</strong> يزن وليد ابراهيم</div>
+                <div><strong>الفصل:</strong> 3/4</div>
+                <div><strong>المادة:</strong> الدراسات الاجتماعية</div>
+            </div>
+        </div>
+
+        <!-- 2. تعريف التضاريس -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>📖 تعريف التضاريس</h2>
+                <div class="definition-box">
+                    <h3 style="color: #4caf50;">التضاريس</h3>
+                    <p>
+                        هي الأشكال السطحية التي تتكون منها القشرة الأرضية من جبال وهضاب وتلال 
+                        وسهول وغيرها، وتتدرج سطوح المملكة العربية السعودية في الارتفاع نحو الغرب، 
+                        وتتصف بالانبساطة عموماً.
+                    </p>
+                </div>
+                <div class="real-image" style="background: linear-gradient(135deg, #2e7d32, #388e3c);">
+                    🗻 🏔️ 🏜️
+                </div>
+                <div class="image-caption">التنوع التضاريسي في المملكة العربية السعودية</div>
+            </div>
+        </div>
+
+        <!-- 3. المرتفعات -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏔️ المرتفعات الغربية</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="real-image" style="background: linear-gradient(135deg, #8d6e63, #6d4c41);">
+                            ⛰️ 🏔️
+                        </div>
+                        <div class="image-caption">جبال طويق بمنطقة الرياض</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="definition-box">
+                            <h3 style="color: #795548;">تعريف المرتفعات الغربية</h3>
+                            <p>
+                                أهم المظاهر التضاريسية في المملكة، تمتد بمحاذاة البحر الأحمر من الحدود الأردنية شمالاً حتى الحدود اليمنية جنوباً بطول 1550 كم تقريباً.
+                            </p>
+                        </div>
+                        <div class="detail-box">
+                            <strong>الأقسام الثلاثة للمرتفعات:</strong><br>
+                            • <strong>القسم الجنوبي:</strong> جبال عسير وجازان<br>
+                            • <strong>القسم الأوسط:</strong> جبال الحجاز<br>
+                            • <strong>القسم الشمالي:</strong> جبال تبوك ومدين
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. الحرات -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🌋 الحرات</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="definition-box">
+                            <h3 style="color: #ff5722;">تعريف الحرات</h3>
+                            <p>
+                                مناطق واسعة إلى الشرق من المرتفعات الغربية، تشمل مناطق واسعة من الصخور 
+                                البازلتية المنصهرة التي تدفقت من باطن الأرض إلى سطحها من خلال فوهات 
+                                بركانية نتيجة أنشطة حركية وزلزالية.
+                            </p>
+                        </div>
+                        <div class="real-image" style="background: linear-gradient(135deg, #424242, #212121);">
+                            🌋 🔥
+                        </div>
+                        <div class="image-caption">حفرة بركانية من الحرات في المملكة</div>
+                    </div>
+                    <div class="content-card">
+                        <h3 style="color: #ff5722;">🌋 أشهر الحرات في المملكة</h3>
+                        <div class="detail-box" style="background: rgba(244, 67, 54, 0.1); border-color: #f44336;">
+                            <strong>1. حرة رهط:</strong> تقع شرق المدينة المنورة، من أكبر الحرات البركانية في المملكة<br><br>
+                            <strong>2. حرة خيبر:</strong> تمتد شمال شرق المدينة المنورة، تحتوي على فوهات بركانية متعددة<br><br>
+                            <strong>3. حرة الشاقة:</strong> تقع في منطقة تبوك شمال غرب المملكة<br><br>
+                            <strong>4. حرة كشب:</strong> في منطقة نجران جنوب المملكة، تتميز بصخورها البازلتية السوداء<br><br>
+                            <strong>5. حرة النار:</strong> شرق منطقة الحجاز، تحتوي على تكوينات بركانية مختلفة
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. التكوينات الرملية -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏜️ التكوينات الرملية (الصحاري)</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🏔️ التكوينات الرملية الرئيسة</h3>
+                        <div class="detail-box">
+                            <strong>1. الربع الخالي:</strong> أكبر صحراء رملية متصلة في العالم، يشكل مساحة واسعة في جنوب شرق المملكة<br><br>
+                            <strong>2. النفود الكبير:</strong> يقع في الشمال، المرتبة الثانية من حيث المساحة بين التكوينات الرملية<br><br>
+                            <strong>3. الدهناء:</strong> تمتد على شكل قوس في الجهة الشمالية والشرقية من المملكة<br><br>
+                            <strong>4. الجافورة:</strong> تقع في المنطقة الشرقية من المملكة
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h3>🌴 التكوينات الفرعية</h3>
+                        <div class="real-image" style="background: linear-gradient(135deg, #f4a261, #e9c46a);">
+                            🐪 🌵
+                        </div>
+                        <div class="image-caption">نفود الثويرات بالرياض</div>
+                        <div class="detail-box">
+                            <strong>تعريف:</strong> تكوينات رملية صغيرة في سهولها، أو حول ضفاف الأودية الكبرى<br><br>
+                            <strong>أمثلة:</strong> نفود الشُعر في منطقتي الرياض والقصيم، ونفود الثويرات في الرُّبعي
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. المجاري المائية -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏞️ المجاري المائية (الأودية والشعاب)</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="real-image" style="background: linear-gradient(135deg, #1976d2, #1565c0);">
+                            🗺️ 💧
+                        </div>
+                        <div class="image-caption">الأودية في المملكة العربية السعودية</div>
+                    </div>
+                    <div class="content-card">
+                        <div class="definition-box">
+                            <h3 style="color: #2196f3;">تعريف المجاري المائية</h3>
+                            <p>
+                                تنتشر على سطح المملكة مجاري المائية الموسمية، وتتنوع على جميع مناطقها، 
+                                إلا أنها لا توجد في الربع الخالي، وتختلف خصائصها من منطقة إلى أخرى.
+                            </p>
+                        </div>
+                        <div class="detail-box">
+                            <strong>الأودية المتجهة غرباً:</strong> تتميز بشدة الانحدار وكثافة الأشجار وخصوبة أراضيها، تنتهي في البحر الأحمر<br><br>
+                            <strong>الأودية المتجهة شرقاً:</strong> تتميز بطولها وسعة مجاريها<br><br>
+                            <strong>أشهر الأودية:</strong> وادي الرمة، وادي بيشة، وادي نجد، وادي الخمخ، وادي حنيفة، وادي الرياض
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. السهول الساحلية -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏖️ السهول الساحلية</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🌊 السهل الساحلي للبحر الأحمر</h3>
+                        <div class="real-image" style="background: linear-gradient(135deg, #ff6347, #dc143c);">
+                            🏔️ 🌊
+                        </div>
+                        <div class="image-caption">ساحل البحر الأحمر - سهل تهامة</div>
+                        <div class="detail-box">
+                            <strong>التعريف:</strong> سهل ساحلي يُعرف باسم "سهل تهامة"<br>
+                            <strong>الموقع:</strong> يمتد من الشمال إلى الجنوب بمحاذاة البحر الأحمر<br>
+                            <strong>الطول:</strong> حوالي 2400 كم تقريباً<br>
+                            <strong>العرض:</strong> يتراوح بين بضعة كيلومترات و140 كم
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h3>🏖️ السهل الساحلي للخليج العربي</h3>
+                        <div class="real-image" style="background: linear-gradient(135deg, #87ceeb, #4682b4);">
+                            🏖️ 🐚
+                        </div>
+                        <div class="image-caption">الساحل الشرقي للخليج العربي</div>
+                        <div class="detail-box">
+                            <strong>التعريف:</strong> سهل ساحلي للمملكة العربية السعودية<br>
+                            <strong>الطول:</strong> حوالي 1000 كيلومتر تقريباً<br>
+                            <strong>الخصائص:</strong> يتميز بانبساطه وقلة ارتفاعه عن مستوى سطح البحر<br>
+                            <strong>الجزر:</strong> يغطي أجزاء كبيرة منه بعض الجُزر الصغيرة التي من أهمها جزر فرسان
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. تعريف الهضاب -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🗻 تعريف الهضاب</h2>
+                
+                <div class="definition-box">
+                    <h3 style="color: #8bc34a;">الهضاب</h3>
+                    <p>
+                        تتنوع الهضاب من حيث الارتفاع، وتقطع هذه الهضاب مئات الأودية الجافة 
+                        التي تتميز بكثافة الأشجار وخصوبة أراضيها، وتنتهي معظمها في البحر.
+                    </p>
+                </div>
+
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🏔️ الهضاب الغربية</h3>
+                        <div class="detail-box">
+                            <strong>1. هضبة نجران:</strong> أقصى جنوب شرق المملكة<br><br>
+                            <strong>2. هضبة عسير:</strong> منطقة عسير<br><br>
+                            <strong>3. هضبة الحجاز:</strong> مكة والمدينة<br><br>
+                            <strong>4. هضبة حسمى:</strong> منطقة تبوك
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <h3>⛰️ هضبة نجد والهضاب الأخرى</h3>
+                        <div class="detail-box" style="background: rgba(139, 195, 74, 0.1); border-color: #8bc34a;">
+                            <strong>هضبة نجد:</strong> أكبر هضاب وطني، وسط المملكة<br>
+                            <strong>الحماد والحجرة:</strong> أقصى شمال المملكة<br>
+                            <strong>الصمان:</strong> شرق المملكة<br>
+                            <strong>الدبدبة:</strong> شرق المملكة
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. خصائص هضبة نجد -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏞️ خصائص هضبة نجد</h2>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="definition-box">
+                            <h3 style="color: #8bc34a;">📍 خصائص هضبة نجد</h3>
+                            <div class="detail-box">
+                                <strong>الموقع:</strong> وسط المملكة العربية السعودية<br>
+                                <strong>المساحة:</strong> أكبر الهضاب في المملكة<br>
+                                <strong>الارتفاع:</strong> تتراوح من 700-1500 متر<br>
+                                <strong>التضاريس:</strong> تتخللها الأودية والجبال المنفردة
+                            </div>
+                        </div>
+                        
+                        <div class="detail-box" style="margin-top: 15px; background: rgba(76, 175, 80, 0.1); border-color: #4caf50;">
+                            <strong>🏞️ مميزات هضبة نجد:</strong><br>
+                            • أكبر هضاب المملكة<br>
+                            • تنقسم إلى أجزاء عديدة بوديان وجبال<br>
+                            • تختلف أجزاؤها من منطقة إلى أخرى<br>
+                            • تنحدر تدريجياً من الغرب إلى الشرق<br>
+                            • تميز الأودية التي تخترق الهضاب<br>
+                            • المرتفعات الغربية باتجاه الشرق بطولها
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div class="real-image" style="background: linear-gradient(135deg, #8bc34a, #689f38); font-size: 4rem;">
+                            🏞️ 🌾
+                        </div>
+                        <div class="image-caption">هضبة نجد - قلب المملكة العربية السعودية</div>
+                        <div class="detail-box">
+                            <strong>🏔️ المعالم المهمة:</strong><br>
+                            • جبال طويق (العمود الفقري لنجد)<br>
+                            • وادي الرياض<br>
+                            • وادي حنيفة<br>
+                            • العاصمة الرياض<br>
+                            • العديد من المدن الكبرى
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. الخاتمة -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🎯 خلاصة الدرس</h2>
+                <div class="main-title" style="padding: 40px;">
+                    <h3 style="color: #4fc3f7; margin-bottom: 30px;">🗺️ تنوع التضاريس في المملكة</h3>
+                    <div class="summary-grid">
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            🏔️ <strong>المرتفعات الغربية:</strong> تمتد بطول 1550 كم
+                        </div>
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            🌋 <strong>الحرات:</strong> مناطق الصخور البازلتية
+                        </div>
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            🏜️ <strong>الصحاري:</strong> الربع الخالي والنفود الكبير
+                        </div>
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            🏞️ <strong>الأودية:</strong> المجاري المائية الموسمية
+                        </div>
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            🏖️ <strong>السهول الساحلية:</strong> تهامة والخليج العربي
+                        </div>
+                        <div class="detail-box" style="font-size: 1.1rem;">
+                            ⛰️ <strong>الهضاب:</strong> نجد أكبرها في الوسط
+                        </div>
+                    </div>
+                    <h3 style="color: #ffd700; margin-top: 30px;">🇸🇦 شكراً لحسن الاستماع 🇸🇦</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideCounter = document.getElementById('slideCounter');
+        const progressBar = document.getElementById('progressBar');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+            updateBackground();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlide();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlide();
+        }
+
+        // التنقل بالكيبورد
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === ' ') {
+                nextSlide();
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                prevSlide();
+                e.preventDefault();
+            } else if (e.key === 'Home') {
+                currentSlide = 0;
+                updateSlide();
+                e.preventDefault();
+            } else if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                updateSlide();
+                e.preventDefault();
+            }
+        });
+
+        // التنقل باللمس (للجوال)
+        let startX = 0;
+        let startY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 50) {
+                    nextSlide();
+                } else if (diffX < -50) {
+                    prevSlide();
+                }
+            }
+        });
+
+        // التنقل بالماوس
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            if (clickX > windowWidth / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // تأثير الجسيمات المتحركة
+        function createParticles() {
+            const particleContainer = document.createElement('div');
+            particleContainer.style.position = 'fixed';
+            particleContainer.style.top = '0';
+            particleContainer.style.left = '0';
+            particleContainer.style.width = '100%';
+            particleContainer.style.height = '100%';
+            particleContainer.style.pointerEvents = 'none';
+            particleContainer.style.zIndex = '1';
+            document.body.appendChild(particleContainer);
+
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = 'rgba(255, 215, 0, 0.6)';
+                particle.style.borderRadius = '50%';
+                particle.style.animation = `float ${5 + Math.random() * 10}s infinite linear`;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particleContainer.appendChild(particle);
+            }
+        }
+
+        // تأثير تغيير الخلفية مع الشرائح
+        function updateBackground() {
+            const colors = [
+                'linear-gradient(135deg, #0c1821 0%, #1a365d 25%, #2d5a87 50%, #3182ce 75%, #4299e1 100%)', // العنوان - أزرق
+                'linear-gradient(135deg, #1a202c 0%, #2d3748 25%, #4a5568 50%, #718096 75%, #a0aec0 100%)', // التعريف - رمادي
+                'linear-gradient(135deg, #744210 0%, #975a16 25%, #d69e2e 50%, #f6e05e 75%, #faf089 100%)', // المرتفعات - بني ذهبي
+                'linear-gradient(135deg, #2d3748 0%, #4a5568 25%, #718096 50%, #a0aec0 75%, #cbd5e0 100%)', // الحرات - رمادي داكن
+                'linear-gradient(135deg, #553c9a 0%, #6b46c1 25%, #8b5cf6 50%, #a78bfa 75%, #c4b5fd 100%)', // الصحاري - بنفسجي
+                'linear-gradient(135deg, #0c4a6e 0%, #0e7490 25%, #0891b2 50%, #06b6d4 75%, #22d3ee 100%)', // الأودية - أزرق مائي
+                'linear-gradient(135deg, #1f2937 0%, #374151 25%, #6b7280 50%, #9ca3af 75%, #d1d5db 100%)', // السهول - رمادي
+                'linear-gradient(135deg, #7c2d12 0%, #dc2626 25%, #ef4444 50%, #f87171 75%, #fca5a5 100%)', // الهضاب - أحمر
+                'linear-gradient(135deg, #166534 0%, #16a34a 25%, #22c55e 50%, #4ade80 75%, #86efac 100%)', // نجد - أخضر
+                'linear-gradient(135deg, #0c1821 0%, #1a365d 25%, #2d5a87 50%, #3182ce 75%, #4299e1 100%)'  // الخلاصة - أزرق
+            ];
+            
+            document.body.style.background = colors[currentSlide];
+        }
+
+        // تشغيل تأثير الجسيمات
+        createParticles();
+
+        // تحديث الشريحة الأولى
+        updateSlide();
+
+        // إخفاء التلميح بعد 5 ثواني
+        setTimeout(() => {
+            const hint = document.querySelector('.navigation-hint');
+            if (hint) {
+                hint.style.opacity = '0';
+                setTimeout(() => hint.remove(), 500);
+            }
+        }, 5000);
+
+        // منع السكرول والتكبير غير المرغوب فيه
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
+        document.body.style.webkitTouchCallout = 'none';
+
+        // تحسين الأداء للأيباد والايفون
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // منع التحديد النصي غير المرغوب فيه
+        document.addEventListener('selectstart', e => e.preventDefault());
+        
+        // تحسين الأداء بإيقاف الأنيميشن المعقدة على الأجهزة البطيئة
+        if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+            document.querySelectorAll('.real-image').forEach(img => {
+                img.style.transition = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
